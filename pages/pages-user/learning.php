@@ -136,7 +136,7 @@ if ($firstUnresolvedLessonId) {
             $completedLessons = 0;
             foreach ($lessons as $lesson) {
                 $lessonId = $lesson['id'];
-                $statusQuery = $database->query("SELECT status FROM `peoplesAnswers` WHERE `question_id` IN (SELECT questionid FROM `homeworks` WHERE `lessonId` = $lessonId) AND `user_id` = " . $_SESSION['uid'])->fetch();
+                $statusQuery = $database->query("SELECT status FROM `peoplesanswers` WHERE `question_id` IN (SELECT questionid FROM `homeworks` WHERE `lessonId` = $lessonId) AND `user_id` = " . $_SESSION['uid'])->fetch();
 
                 if (isset($statusQuery['status'])) {
                     $completedLessons++;
