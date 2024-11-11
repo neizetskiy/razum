@@ -14,7 +14,7 @@ $stmt = $database->prepare("
     JOIN lessons l ON h.lessonId = l.id
     JOIN courses c ON l.courseId = c.id
     LEFT JOIN peoplesanswers pa ON h.questionId = pa.question_id AND pa.user_id = :userId
-    JOIN purchased p ON c.id = p.courseId AND p.userId = :userId
+    JOIN Purchased p ON c.id = p.courseId AND p.userId = :userId
     WHERE pa.id IS NULL;
 ");
 $stmt->execute(['userId' => $userId]);
@@ -27,7 +27,7 @@ $stmt = $database->prepare("
     JOIN lessons l ON h.lessonId = l.id
     JOIN courses c ON l.courseId = c.id
     LEFT JOIN peoplesanswers pa ON h.questionId = pa.question_id AND pa.user_id = :userId
-    JOIN purchased p ON c.id = p.courseId AND p.userId = :userId
+    JOIN Purchased p ON c.id = p.courseId AND p.userId = :userId
     WHERE pa.id IS NULL
     ORDER BY h.id
     LIMIT 1;
@@ -45,7 +45,7 @@ $stmt = $database->prepare("
     JOIN homeworks h ON l.id = h.lessonId
     JOIN courses c ON l.courseId = c.id
     LEFT JOIN peoplesanswers pa ON h.questionId = pa.question_id AND pa.user_id = :userId
-    JOIN purchased p ON c.id = p.courseId AND p.userId = :userId
+    JOIN Purchased p ON c.id = p.courseId AND p.userId = :userId
     WHERE pa.id IS NULL
     ORDER BY l.id
     LIMIT 1;
