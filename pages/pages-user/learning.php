@@ -152,7 +152,7 @@ if ($firstUnresolvedLessonId) {
                  <?php foreach ($lessons as $lesson): ?>
                         <?php
                         $lessonId = $lesson['id'];
-                        $statusQuery = $database->query("SELECT status FROM `peoplesAnswers` WHERE `question_id` IN (SELECT questionid FROM `homeworks` WHERE `lessonId` = $lessonId) AND `user_id` = " . $_SESSION['uid'])->fetch();
+                        $statusQuery = $database->query("SELECT status FROM `peoplesanswers` WHERE `question_id` IN (SELECT questionid FROM `homeworks` WHERE `lessonId` = $lessonId) AND `user_id` = " . $_SESSION['uid'])->fetch();
 
                         if (isset($statusQuery['status']) && $statusQuery['status'] == 'on_check') {
                             $statusClass = 'yellow-bar';
