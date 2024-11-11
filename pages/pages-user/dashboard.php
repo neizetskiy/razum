@@ -5,65 +5,65 @@
 
             <?php
 
-            $userId = $_SESSION['uid']; 
+$userId = $_SESSION['uid']; 
 
-            
-            $stmt = $database->prepare("
-                SELECT COUNT(*) AS unresolved_count
-                FROM `homeworks` h
-                JOIN `lessons` l ON h.lessonId = l.id
-                JOIN `courses` c ON l.courseId = c.id
-                LEFT JOIN `peoplesanswers` pa ON h.questionId = pa.question_id AND pa.user_id = :userId
-                JOIN `purchased` p ON c.id = p.courseId AND p.userId = :userId
-                WHERE pa.id IS NULL;
-            ");
-            $stmt->execute(['userId' => $userId]);
-            $unresolvedCount = $stmt->fetchColumn();
+// Подсчет количества нерешенных домашних заданий
+$stmt = $database->prepare("
+    SELECT COUNT(*) AS unresolved_count
+    FROM homeworks h
+    JOIN lessons l ON h.lessonId = l.id
+    JOIN courses c ON l.courseId = c.id
+    LEFT JOIN peoplesanswers pa ON h.questionId = pa.question_id AND pa.user_id = :userId
+    JOIN purchased p ON c.id = p.courseId AND p.userId = :userId
+    WHERE pa.id IS NULL;
+");
+$stmt->execute(['userId' => $userId]);
+$unresolvedCount = $stmt->fetchColumn();
 
-            
-            $stmt = $database->prepare("
-                SELECT h.id AS homework_id, h.lessonId
-                FROM `homeworks` h
-                JOIN `lessons` l ON h.lessonId = l.id
-                JOIN `courses` c ON l.courseId = c.id
-                LEFT JOIN `peoplesanswers` pa ON h.questionId = pa.question_id AND pa.user_id = :userId
-                JOIN `purchased` p ON c.id = p.courseId AND p.userId = :userId
-                WHERE pa.id IS NULL
-                ORDER BY h.id
-                LIMIT 1;
-            ");
-            $stmt->execute(['userId' => $userId]);
-            $firstUnresolvedHomework = $stmt->fetch(PDO::FETCH_ASSOC);
+// Получение ID первого нерешенного домашнего задания и соответствующего lessonId
+$stmt = $database->prepare("
+    SELECT h.id AS homework_id, h.lessonId
+    FROM homeworks h
+    JOIN lessons l ON h.lessonId = l.id
+    JOIN courses c ON l.courseId = c.id
+    LEFT JOIN peoplesanswers pa ON h.questionId = pa.question_id AND pa.user_id = :userId
+    JOIN purchased p ON c.id = p.courseId AND p.userId = :userId
+    WHERE pa.id IS NULL
+    ORDER BY h.id
+    LIMIT 1;
+");
+$stmt->execute(['userId' => $userId]);
+$firstUnresolvedHomework = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $firstUnresolvedHomeworkId = $firstUnresolvedHomework ? $firstUnresolvedHomework['homework_id'] : null;
-            $firstUnresolvedLessonId = $firstUnresolvedHomework ? $firstUnresolvedHomework['lessonId'] : null;
+$firstUnresolvedHomeworkId = $firstUnresolvedHomework ? $firstUnresolvedHomework['homework_id'] : null;
+$firstUnresolvedLessonId = $firstUnresolvedHomework ? $firstUnresolvedHomework['lessonId'] : null;
 
-           
-            $stmt = $database->prepare("
-                SELECT l.id AS lesson_id
-                FROM `lessons` l
-                JOIN `homeworks` h ON l.id = h.lessonId
-                JOIN `courses` c ON l.courseId = c.id
-                LEFT JOIN `peoplesanswers` pa ON h.questionId = pa.question_id AND pa.user_id = :userId
-                JOIN `purchased` p ON c.id = p.courseId AND p.userId = :userId
-                WHERE pa.id IS NULL
-                ORDER BY l.id
-                LIMIT 1;
-            ");
-            $stmt->execute(['userId' => $userId]);
-            $firstUnresolvedLesson = $stmt->fetch(PDO::FETCH_ASSOC);
+// Получение ID первого урока с нерешенным домашним заданием
+$stmt = $database->prepare("
+    SELECT l.id AS lesson_id
+    FROM lessons l
+    JOIN homeworks h ON l.id = h.lessonId
+    JOIN courses c ON l.courseId = c.id
+    LEFT JOIN peoplesanswers pa ON h.questionId = pa.question_id AND pa.user_id = :userId
+    JOIN purchased p ON c.id = p.courseId AND p.userId = :userId
+    WHERE pa.id IS NULL
+    ORDER BY l.id
+    LIMIT 1;
+");
+$stmt->execute(['userId' => $userId]);
+$firstUnresolvedLesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $firstUnresolvedLessonId = $firstUnresolvedLesson ? $firstUnresolvedLesson['lesson_id'] : null;
+$firstUnresolvedLessonId = $firstUnresolvedLesson ? $firstUnresolvedLesson['lesson_id'] : null;
 
-            
-            $lessonName = null;
-            if ($firstUnresolvedLessonId) {
-                $stmt = $database->prepare("SELECT `name` FROM `lessons` WHERE `id` = :lessonId");
-                $stmt->execute(['lessonId' => $firstUnresolvedLessonId]);
-                $lessonName = $stmt->fetchColumn();
-            }
+// Получение названия урока
+$lessonName = null;
+if ($firstUnresolvedLessonId) {
+    $stmt = $database->prepare("SELECT `name` FROM `lessons` WHERE `id` = :lessonId");
+    $stmt->execute(['lessonId' => $firstUnresolvedLessonId]);
+    $lessonName = $stmt->fetchColumn();
+}
 
-            ?>
+?>
 
 
             <?php if($firstUnresolvedLessonId): ?>
