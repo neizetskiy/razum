@@ -122,7 +122,7 @@
         <div class="progress">
             <h4>Ваш прогресс</h4>
             <?php if(!$purchased): ?>
-            <p class="NoLearning">Пока что вы не прошли ни одного урока :(</p>
+            <p class="NoLearning">Пока что вы не прошли ни одного урока</p>
             <?php endif; ?>
             <?php foreach ($purchased as $pur):
             $course = $database->query("SELECT * FROM `courses` WHERE `id` = " . $pur['courseId'])->fetch(2);
