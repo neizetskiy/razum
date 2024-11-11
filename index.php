@@ -307,7 +307,7 @@ if (isset($_SESSION['uid'])) {
                     require('pages/pages-user/answers.php');
                     break;
                 case 'learning':
-                    require('pages/pages-user/learning.php');
+                    require('pages/pages-user/dashboard.php');
                     break;
                 case 'adminUsers':
                     require('pages/pages-admin/admin-users.php');
