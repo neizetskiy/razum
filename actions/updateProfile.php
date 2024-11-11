@@ -31,7 +31,7 @@ if($_FILES['ava']['size'] == 0){
 else{
     $imageName = uniqid() .  '.' . pathinfo($_FILES['ava']['name'], PATHINFO_EXTENSION);
     move_uploaded_file($_FILES['ava']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/public/' . $imageName);
-    $root =  '/public/' . $imageName;
+    $root =  'https://edu.razumneuro.ru/public/' . $imageName;
 }
 
 
