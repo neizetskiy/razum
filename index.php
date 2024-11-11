@@ -339,6 +339,9 @@ if (isset($_SESSION['uid'])) {
                 case 'check':
                     require('pages/pages-admin/check.php');
                     break;
+                case 'main':
+                    require('pages/pages-user/main.php');
+                    break;
 
                 default:
                     require('pages/pages-user/registration.php');
