@@ -63,6 +63,7 @@ if ($firstUnresolvedLessonId) {
     $lessonName = $stmt->fetchColumn();
 }
 
+    var_dump($firstUnresolvedLesson);
 ?>
 
 
